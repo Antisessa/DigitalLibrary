@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+
+<!--тег div в котором th each проходится по всем Людям из people-->
+<!--    th href готовит ссылку на человека формата /people/id -->
+<!--       + текст ссылки формата ФИО, кол-во взятых книг-->
+<div th:each = "person : ${people}">
+    <a th:href="@{/people/{id}(id=${person.getId()})}"
+       th:text="${person.getName()}">user</a>
+</div>
+
+</body>
+</html>
