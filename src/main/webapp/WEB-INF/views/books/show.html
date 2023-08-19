@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+
+<p th:text="${'Name: ' + book.getName() + ', ' + book.getDateOfPublication()}">Book Name and date</p>
+<br/>
+
+<p th:text="${'Author: ' + book.getAuthor()}">Author name of this book</p>
+<br/>
+
+<p th:text="${'This book is ' + book.getStatus()}">Book status</p>
+<div th:if="${book.getStatus().equals(Mood.Free)}" th:errors="*{name}">Name Error</div>
+<br/>
+
+</body>
+</html>

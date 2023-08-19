@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @NoArgsConstructor
@@ -20,9 +23,12 @@ public class Person {
     @Column(name = "id")
     private int id;
 
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 10, max = 100, message = "Name should be between 10 and 100 characters")
     @Column(name = "name")
     private String name;
 
+    @Min(value = 0, message = "Age should be greater than 0")
     @Column(name = "age")
     private int age;
 

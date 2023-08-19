@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -21,12 +23,16 @@ public class Book {
     @Column(name = "id")
     private int id;
 
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 10, max = 100, message = "Name should be between 10 and 100 characters")
     @Column(name = "name")
     private String name;
 
     @Column(name = "status")
     private Status status;
 
+    @NotEmpty(message = "Author name should not be empty")
+    @Size(min = 6, max = 100, message = "Author name should be between 6 and 100 characters")
     @Column(name = "author")
     private String author;
 
@@ -36,7 +42,7 @@ public class Book {
     @Past(message = "Дата должна быть не позже текущей")
     private Date dateOfPublication;
 
-    @Column(name = "return_date")
+    @Column(name = "returndate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date returnDate;
 
