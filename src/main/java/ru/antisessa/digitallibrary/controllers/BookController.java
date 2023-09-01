@@ -9,6 +9,7 @@ import ru.antisessa.digitallibrary.models.Book;
 import ru.antisessa.digitallibrary.models.Person;
 import ru.antisessa.digitallibrary.models.Status;
 import ru.antisessa.digitallibrary.services.BookService;
+import ru.antisessa.digitallibrary.services.PeopleService;
 
 import javax.validation.Valid;
 
@@ -17,10 +18,12 @@ import javax.validation.Valid;
 public class BookController {
 
     private final BookService bookService;
+    private final PeopleService peopleService;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, PeopleService peopleService) {
         this.bookService = bookService;
+        this.peopleService = peopleService;
     }
 
     //Страница отображения всех книг
@@ -32,8 +35,10 @@ public class BookController {
 
     //Страница отображения книги по id
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model,
+                       @ModelAttribute("person") Person person) {
         model.addAttribute("book", bookService.findOne(id));
+        model.addAttribute("people", peopleService.findAll());
         return "books/show";
     }
 
@@ -41,6 +46,13 @@ public class BookController {
     @GetMapping("/new")
     public String newBook(@ModelAttribute("book") Book book) {
         return "books/new";
+    }
+
+    //Страница редактирования книги
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable("id") int id) {
+        model.addAttribute("book", bookService.findOne(id));
+        return "books/edit";
     }
 
     //метод контролера для создания новой книги,
@@ -58,13 +70,6 @@ public class BookController {
         return "redirect:/books";
     }
 
-    //Страница редактирования книги
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("book", bookService.findOne(id));
-        return "books/edit";
-    }
-
     //метод обновления книги с проверкой на ошибки в полях
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("book") @Valid Book book,
@@ -77,10 +82,23 @@ public class BookController {
         return "redirect:/books";
     }
 
+    @PatchMapping("/setOwner/{id}")
+    public String setOwner(@ModelAttribute("person") Person newOwner,
+                           @PathVariable("id") int book_id){
+        bookService.setOwner(book_id, newOwner);
+        return "redirect:/books/{id}";
+    }
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         bookService.delete(id);
         return "redirect:/books";
+    }
+
+    @DeleteMapping("/deleteOwner/{id}")
+    public String deleteOwner(@PathVariable("id") int id){
+        bookService.deleteOwner(id);
+        return "redirect:/books/{id}";
     }
 
 }

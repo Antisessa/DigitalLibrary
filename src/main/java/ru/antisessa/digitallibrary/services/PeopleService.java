@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.antisessa.digitallibrary.models.Person;
 import ru.antisessa.digitallibrary.repositories.PeopleRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

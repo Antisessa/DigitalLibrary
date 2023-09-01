@@ -7,17 +7,25 @@
 <body>
 
 <p th:text="${person.getName() + ', ' + person.getAge()}">VALUE</p>
-<br/>
-<p th:text="${'Количество взятых книг: ' + books.size()}">VALUE</p>
 
-<br/>
-<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit this person</a>
+<div th:text="'Человек пока не взял ни одной книги'"
+     th:if="${books.isEmpty()}">No books</div>
 
-<br/>
+<div th:text="${'Количество взятых книг: ' + books.size()}"
+     th:if="${!books.isEmpty()}">Has books</div>
+
+<div th:each="book : ${books}">
+    <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:text="${book.getName()}">Book</a>
+</div>
+
 <hr/>
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit this person</a>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
+<br/>
+<a href="/people">Go to People List</a>
 
 </body>
 </html>

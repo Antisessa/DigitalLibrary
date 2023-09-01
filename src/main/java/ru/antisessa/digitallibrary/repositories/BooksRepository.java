@@ -14,7 +14,7 @@ public interface BooksRepository extends JpaRepository<Book, Integer> {
 
     List<Book> findByOwner(Person owner);
 
-    List<Book> findBookByDateOfPublicationEquals(Date date);
+    List<Book> findBookByYearOfPublicationEquals(int year);
 
     List<Book> findBookByAuthorStartingWith(String startingWith);
 

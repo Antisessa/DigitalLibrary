@@ -33,8 +33,8 @@ public class BookService {
     }
 
     //найти книгу по дате издания
-    public List<Book> findBookByDateOfPublicationEquals(Date date){
-        return booksRepository.findBookByDateOfPublicationEquals(date);
+    public List<Book> findBookByDateOfPublicationEquals(int year){
+        return booksRepository.findBookByYearOfPublicationEquals(year);
     }
 
     //найти книгу по первым буквам ФИО автора
@@ -69,7 +69,30 @@ public class BookService {
     }
 
     @Transactional
+    public void setOwner(int book_id, Person person){
+        Book book = booksRepository.findById(book_id).orElse(null);
+
+        if(book != null){
+            book.setOwner(person);
+            book.setStatus(Status.Busy);
+            booksRepository.save(book);
+        }
+    }
+
+    @Transactional
     public void delete(int id){
         booksRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteOwner(int id){
+        Optional<Book> foundBook = booksRepository.findById(id);
+        Book book = foundBook.orElse(null);
+
+        if(book != null){
+            book.setOwner(null);
+            book.setStatus(Status.Free);
+            book.setReturnDate(null);
+        }
     }
 }

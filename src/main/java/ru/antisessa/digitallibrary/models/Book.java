@@ -24,7 +24,7 @@ public class Book {
     private int id;
 
     @NotEmpty(message = "Name should not be empty")
-    @Size(min = 10, max = 100, message = "Name should be between 10 and 100 characters")
+    @Size(min = 3, max = 100, message = "Name should be between 10 and 100 characters")
     @Column(name = "name")
     private String name;
 
@@ -36,11 +36,8 @@ public class Book {
     @Column(name = "author")
     private String author;
 
-    @Column(name = "date_of_publication")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Past(message = "Дата должна быть не позже текущей")
-    private Date dateOfPublication;
+    @Column(name = "year_of_publication")
+    private int yearOfPublication;
 
     @Column(name = "returndate")
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,10 +47,10 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
 
-    public Book(String name, String author, Date dateOfPublication) {
+    public Book(String name, String author, int yearOfPublication) {
         this.name = name;
         this.author = author;
-        this.dateOfPublication = dateOfPublication;
+        this.yearOfPublication = yearOfPublication;
         this.status = Status.Free;
         this.returnDate = null;
         this.owner = null;
