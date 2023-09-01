@@ -24,7 +24,7 @@ public class Person {
     private int id;
 
     @NotEmpty(message = "Name should not be empty")
-    @Size(min = 10, max = 100, message = "Name should be between 10 and 100 characters")
+    @Size(min = 3, max = 100, message = "Name should be between 10 and 100 characters")
     @Column(name = "name")
     private String name;
 

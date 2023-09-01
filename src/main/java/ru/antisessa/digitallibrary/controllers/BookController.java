@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.antisessa.digitallibrary.models.Book;
 import ru.antisessa.digitallibrary.models.Person;
+import ru.antisessa.digitallibrary.models.Status;
 import ru.antisessa.digitallibrary.services.BookService;
 
 import javax.validation.Valid;
@@ -52,6 +53,7 @@ public class BookController {
         if (bindingResult.hasErrors())
             return "books/new";
 
+        book.setStatus(Status.Free);
         bookService.save(book);
         return "redirect:/books";
     }

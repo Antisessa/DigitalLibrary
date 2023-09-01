@@ -13,8 +13,20 @@
 <br/>
 
 <p th:text="${'This book is ' + book.getStatus()}">Book status</p>
-<div th:if="${book.getStatus().equals(Mood.Free)}" th:errors="*{name}">Name Error</div>
+
+<a th:href="@{/people/{id}(id=${book.getOwner().getId()})}"
+   th:text="${book.getOwner().getName()}"
+   th:unless="${#bools.isTrue(book.getOwner())}">view</a>
 <br/>
+
+<br/>
+<a th:href="@{/books/{id}/edit(id=${book.getId()})}">Edit this book</a>
+
+<br/>
+<hr/>
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
 
 </body>
 </html>
