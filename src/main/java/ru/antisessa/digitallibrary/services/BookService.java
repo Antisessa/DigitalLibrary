@@ -1,6 +1,7 @@
 package ru.antisessa.digitallibrary.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.antisessa.digitallibrary.models.Book;
@@ -57,8 +58,17 @@ public class BookService {
         return booksRepository.findAll();
     }
 
+    public List<Book> findAllByPage(int page, int itemsPerPage) {
+        if (page == 0 && itemsPerPage == 0) {
+            return booksRepository.findAll();
+        } else {
+            return booksRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+        }
+    }
+
     @Transactional
     public void save(Book book) {
+        book.setStatus(Status.Free);
         booksRepository.save(book);
     }
 

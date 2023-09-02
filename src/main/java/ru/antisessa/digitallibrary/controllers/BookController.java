@@ -26,10 +26,19 @@ public class BookController {
         this.peopleService = peopleService;
     }
 
+//    //Страница отображения всех книг
+//    @GetMapping()
+//    public String index(Model model) {
+//        model.addAttribute("books", bookService.findAll());
+//        return "books/index";
+//    }
+
     //Страница отображения всех книг
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String index(Model model,
+                              @RequestParam(defaultValue = "0", name = "page") int page,
+                              @RequestParam(defaultValue = "0", name = "itemPerPage") int itemPerPage) {
+        model.addAttribute("books", bookService.findAllByPage(page, itemPerPage));
         return "books/index";
     }
 
