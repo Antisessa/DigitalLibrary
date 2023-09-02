@@ -2,6 +2,7 @@ package ru.antisessa.digitallibrary.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.antisessa.digitallibrary.models.Book;
@@ -9,7 +10,6 @@ import ru.antisessa.digitallibrary.models.Person;
 import ru.antisessa.digitallibrary.models.Status;
 import ru.antisessa.digitallibrary.repositories.BooksRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,11 +58,16 @@ public class BookService {
         return booksRepository.findAll();
     }
 
-    public List<Book> findAllByPage(int page, int itemsPerPage) {
-        if (page == 0 && itemsPerPage == 0) {
+    public List<Book> findAllWithParam(int page, int itemsPerPage, boolean sort_by_year) {
+        if (page == 0 && itemsPerPage == 0 && !sort_by_year) {
             return booksRepository.findAll();
-        } else {
+        } else if (page == 0 && itemsPerPage == 0 && sort_by_year) {
+            return booksRepository.findAll(Sort.by("yearOfPublication"));
+        } else if (itemsPerPage != 0 && !sort_by_year) {
             return booksRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+        } else {
+            return booksRepository.findAll(PageRequest.of(page, itemsPerPage,
+                    Sort.by("yearOfPublication"))).getContent();
         }
     }
 
