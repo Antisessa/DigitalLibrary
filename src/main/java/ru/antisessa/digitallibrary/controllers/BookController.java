@@ -26,20 +26,17 @@ public class BookController {
         this.peopleService = peopleService;
     }
 
-//    //Страница отображения всех книг
-//    @GetMapping()
-//    public String index(Model model) {
-//        model.addAttribute("books", bookService.findAll());
-//        return "books/index";
-//    }
-
-    //Страница отображения всех книг
+    //Страница отображения всех книг с параметрами пагинации и сортировки
     @GetMapping()
     public String index(Model model,
-                              @RequestParam(defaultValue = "0", name = "page") int page,
+                              @RequestParam(defaultValue = "1", name = "page") int page,
                               @RequestParam(defaultValue = "0", name = "itemPerPage") int itemPerPage,
                               @RequestParam(defaultValue = "false", name = "sort_by_year") boolean sort_by_year) {
+        model.addAttribute("page", page);
+        model.addAttribute("itemPerPage", itemPerPage);
+        model.addAttribute("sort_by_year", sort_by_year);
         model.addAttribute("books", bookService.findAllWithParam(page, itemPerPage, sort_by_year));
+        model.addAttribute("allBooks", bookService.findAll());
         return "books/index";
     }
 
@@ -63,6 +60,15 @@ public class BookController {
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("book", bookService.findOne(id));
         return "books/edit";
+    }
+
+    //Страница поиска книги
+    @GetMapping("/search")
+    public String search(Model model,
+                         @RequestParam(defaultValue = "", name = "search") String search){
+        model.addAttribute("search", search);
+        model.addAttribute("foundBook", bookService.findByNameStartingWith(search));
+        return "books/search";
     }
 
     //метод контролера для создания новой книги,

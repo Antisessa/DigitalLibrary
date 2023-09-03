@@ -11,6 +11,7 @@ import ru.antisessa.digitallibrary.models.Status;
 import ru.antisessa.digitallibrary.repositories.BooksRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,15 @@ public class BookService {
     //найти книги по названию
     public List<Book> findByName(String name){
         return booksRepository.findByName(name);
+    }
+
+    //найти книгу по началу названия
+    public List<Book> findByNameStartingWith(String search) {
+        if (Objects.equals(search, "")) {
+            return null;
+        } else {
+            return booksRepository.findByNameStartingWithIgnoreCase(search);
+        }
     }
 
     //найти книги по владельцу
@@ -59,14 +69,14 @@ public class BookService {
     }
 
     public List<Book> findAllWithParam(int page, int itemsPerPage, boolean sort_by_year) {
-        if (page == 0 && itemsPerPage == 0 && !sort_by_year) {
+        if (itemsPerPage == 0 && !sort_by_year) {
             return booksRepository.findAll();
-        } else if (page == 0 && itemsPerPage == 0 && sort_by_year) {
+        } else if (itemsPerPage == 0 && sort_by_year) {
             return booksRepository.findAll(Sort.by("yearOfPublication"));
         } else if (itemsPerPage != 0 && !sort_by_year) {
-            return booksRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+            return booksRepository.findAll(PageRequest.of(page-1, itemsPerPage)).getContent();
         } else {
-            return booksRepository.findAll(PageRequest.of(page, itemsPerPage,
+            return booksRepository.findAll(PageRequest.of(page-1, itemsPerPage,
                     Sort.by("yearOfPublication"))).getContent();
         }
     }

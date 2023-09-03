@@ -11,6 +11,8 @@ import java.util.List;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
     List<Book> findByName(String name);
 
+    List<Book> findByNameStartingWithIgnoreCase(String search);
+
     List<Book> findByOwner(Person owner);
 
     List<Book> findBookByYearOfPublicationEquals(int year);
