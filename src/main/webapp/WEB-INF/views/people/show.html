@@ -16,6 +16,7 @@
 
 <div th:each="book : ${books}">
     <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:style="${book.isExpire() ? 'color:red' : 'color:black'}"
        th:text="${book.getName()}">Book</a>
 </div>
 
@@ -25,7 +26,9 @@
     <input type="submit" value="Delete"/>
 </form>
 <br/>
-<a href="/people">Go to People List</a>
+<form action="/people">
+    <input type="submit" value="Перейти ко списку пользователей"/>
+</form>
 
 </body>
 </html>

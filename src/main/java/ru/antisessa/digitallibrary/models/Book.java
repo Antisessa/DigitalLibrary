@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -42,6 +43,23 @@ public class Book {
     @Column(name = "returndate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date returnDate;
+
+    @Column(name = "date_of_taking")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfTaking;
+
+    @Transient
+    private boolean isExpire;
+
+    public boolean isExpire(){
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+        if(returnDate == null) {
+            return false;
+        } else {
+            return timestamp.after(returnDate);
+        }
+    }
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")

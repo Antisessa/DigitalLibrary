@@ -10,13 +10,20 @@ import ru.antisessa.digitallibrary.models.Person;
 import ru.antisessa.digitallibrary.models.Status;
 import ru.antisessa.digitallibrary.repositories.BooksRepository;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(readOnly = true)
 public class BookService {
+
+    private static final SimpleDateFormat sdf1 = new SimpleDateFormat("dd\\MM\\yyyy");
+
     private final BooksRepository booksRepository;
 
     @Autowired
@@ -98,8 +105,17 @@ public class BookService {
         Book book = booksRepository.findById(book_id).orElse(null);
 
         if(book != null){
+            Date date = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
+
             book.setOwner(person);
             book.setStatus(Status.Busy);
+
+            book.setDateOfTaking(date);
+
+            Timestamp returnTimestamp = new Timestamp(timestamp.getTime() + 60000);
+            book.setReturnDate(returnTimestamp);
+
             booksRepository.save(book);
         }
     }
@@ -118,6 +134,7 @@ public class BookService {
             book.setOwner(null);
             book.setStatus(Status.Free);
             book.setReturnDate(null);
+            book.setDateOfTaking(null);
         }
     }
 }

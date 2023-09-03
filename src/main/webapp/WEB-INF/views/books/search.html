@@ -26,6 +26,7 @@
 
 <div th:each="book : ${foundBook}">
     <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:style="${book.isExpire() ? 'color:red' : 'color:black'}"
        th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublication()}">book</a>
 
     <div th:if="${book.getOwner() == null}"
